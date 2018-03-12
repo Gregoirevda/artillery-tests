@@ -1,0 +1,23 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 120
+      arrivalRate: 5
+      rampTo: 50
+  processor: "./artillery-helper.js"
+  socketio:
+    transports: ["websocket"]
+
+scenarios:
+  - engine: "socketio"
+    flow:
+      - post:
+          url: "/graphql"
+          beforeRequest: "getPlaylist"
+      - get:
+          url: '/'
+      - emit:
+          channel: "echo"
+          namespace: "/channel-41"
+          data: "hello"
+      - think: 1
